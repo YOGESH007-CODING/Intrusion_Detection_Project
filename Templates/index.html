@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Intrusion Detection System</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #121212;
+      color: #e0e0e0;
+      max-width: 700px;
+      margin: 20px auto;
+      padding: 20px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, #001f3f 0%, #0074d9 100%);
+    }
+
+    h1 {
+      text-align: center;
+      font-weight: 700;
+      margin-bottom: 24px;
+    }
+
+    #featuresInput {
+      width: 100%;
+      min-height: 120px;
+      padding: 12px;
+      font-family: monospace;
+      font-size: 14px;
+      border-radius: 6px;
+      border: none;
+      box-sizing: border-box;
+      margin-bottom: 16px;
+      line-height: 1.4;
+    }
+
+    button {
+      width: 100%;
+      background-color: #39ff14;
+      border: none;
+      padding: 14px;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      border-radius: 6px;
+      color: #000;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #2ecc40;
+    }
+
+    #output {
+      margin-top: 24px;
+      font-size: 20px;
+      font-weight: 600;
+      padding: 16px;
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 12px;
+      text-align: center;
+    }
+
+    #error {
+      margin-top: 16px;
+      color: #ff4136;
+      font-weight: 600;
+      text-align: center;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Intrusion Detection</h1>
+  <p>Enter 78 network features as comma-separated values (no brackets):</p>
+  <textarea id="featuresInput" placeholder="e.g. 0.0, 1.23, 4.56, ..."></textarea>
+  <button id="predictBtn">Predict Attack</button>
+
+  <div id="output"></div>
+  <div id="error"></div>
+
+  <script>
+    const predictBtn = document.getElementById('predictBtn');
+    const featuresInput = document.getElementById('featuresInput');
+    const output = document.getElementById('output');
+    const error = document.getElementById('error');
+
+    predictBtn.addEventListener('click', () => {
+      error.textContent = '';
+      output.textContent = '';
+
+      let raw = featuresInput.value.trim();
+
+      if (!raw) {
+        error.textContent = 'Please enter 78 feature values.';
+        return;
+      }
+
+      let features = raw.split(',').map(x => parseFloat(x.trim()));
+
+      if (features.length !== 78 || features.some(isNaN)) {
+        error.textContent = 'Invalid input. Make sure to enter exactly 78 numeric values separated by commas.';
+        return;
+      }
+
+      fetch('/predict', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ features: features }),
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.error) {
+          error.textContent = 'Error: ' + data.error;
+        } else {
+          output.innerHTML = `
+            <p><strong>Prediction:</strong> ${data.predicted_class_name}</p>
+            <p><strong>Confidence:</strong> ${(data.confidence * 100).toFixed(2)}%</p>
+          `;
+        }
+      })
+      .catch(err => {
+        error.textContent = 'Error communicating with server.';
+      });
+    });
+  </script>
+</body>
+
+</html>
