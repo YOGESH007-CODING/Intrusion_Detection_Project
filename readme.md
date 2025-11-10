@@ -43,32 +43,7 @@ The model is trained on the CIC-IDS2017 dataset with 78 network flow features an
 
 The application is deployed and accessible online. Access the live intrusion detection interface for real-time classification of network traffic with instant predictions and confidence scores.
 
-Deployment URL: [Render Deployment Link]
-
----
-
-## Project Structure
-
-```
-Intrusion_Detection_Project/
-â”œâ”€â”€ app.py                          # Flask web application
-â”œâ”€â”€ requirements.txt                # Python dependencies
-â”œâ”€â”€ Templates/
-â”‚   â””â”€â”€ index.html                  # Web interface
-â”œâ”€â”€ Models/
-â”‚   â””â”€â”€ cnn_bilstm_best.pth        # Trained model weights
-â”œâ”€â”€ Data/
-â”‚   â”œâ”€â”€ Processed_data/            # Processed training data (git ignored)
-â”‚   â””â”€â”€ archive/                   # Raw dataset (git ignored)
-â”œâ”€â”€ Notebooks/
-â”‚   â”œâ”€â”€ 01_Data_Exploration.ipynb
-â”‚   â”œâ”€â”€ 02_Model_Training.ipynb
-â”‚   â””â”€â”€ 03_Hyperparameter_Tuning.ipynb
-â”œâ”€â”€ .gitignore                      # Git ignore file
-â””â”€â”€ README.md                       # This file
-```
-
----
+Deployment URL: https://intrusion-detection-project-5ufv.onrender.com/
 
 ## Installation
 
